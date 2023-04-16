@@ -1,14 +1,26 @@
 package algorithm
 
+/**
+ * Author: Deean
+ * Date: 2023-04-16 17:49
+ * FileName: algorithm
+ * Description:
+ */
+
 class P2549 {
     class Solution {
         fun distinctIntegers(n: Int): Int {
-            return n
+            return if (n == 1) {
+                1
+            } else {
+                n - 1
+            }
         }
     }
 }
 
 fun main() {
-    val s = P2549.Solution()
-    println(s.distinctIntegers(10))
+    val solution = P2549.Solution()
+    val ans = solution.distinctIntegers(10)
+    println(ans)
 }

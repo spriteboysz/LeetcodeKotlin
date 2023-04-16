@@ -1,5 +1,12 @@
 package algorithm
 
+/**
+ * Author: Deean
+ * Date: 2023-04-16 17:46
+ * FileName: algorithm
+ * Description:
+ */
+
 class P2413 {
     class Solution {
         fun smallestEvenMultiple(n: Int): Int {
@@ -13,7 +20,7 @@ class P2413 {
 }
 
 fun main() {
-    println("Hello world")
-    val s = P2413.Solution()
-    println(s.smallestEvenMultiple(100))
+    val solution = P2413.Solution()
+    val ans = solution.smallestEvenMultiple(10)
+    println(ans)
 }
