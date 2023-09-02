@@ -29,8 +29,7 @@ class RecordDAO02Test {
     @Test
     void queryRecordAll() {
         List<Record> records = recordDAO.queryRecord();
-        for (Record record :
-                records) {
+        for (Record record : records) {
             System.out.println(record);
         }
     }

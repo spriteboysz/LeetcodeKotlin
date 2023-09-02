@@ -3,6 +3,7 @@ package javaweb.jdbc.library.DAO;
 import javaweb.jdbc.library.DTO.Student;
 import javaweb.jdbc.library.Utils.DruidUtils;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import javax.sql.DataSource;
@@ -47,33 +48,21 @@ public class StudentDAO03 {
     public Student queryStudent(int sid) {
         DataSource dataSource = DruidUtils.getDataSource();
         QueryRunner queryRunner = new QueryRunner(dataSource);
-        Student student1 = null;
-        String sql = "select * from students where sid = ?";
+        Student student = null;
+        String sql = "select sid, stu_num stuNum, stu_name stuName, stu_gender stuGender, stu_age stuAge, stu_class stuClass, stu_desc stuDesc from students where sid = ?";
         try {
-            student1 = queryRunner.query(sql, resultSet -> {
-                Student student = new Student();
-                if (resultSet.next()) {
-                    student.setsId(sid);
-                    student.setStuNum(resultSet.getString("stu_num"));
-                    student.setStuName(resultSet.getString("stu_name"));
-                    student.setStuGender(resultSet.getString("stu_gender"));
-                    student.setStuAge(resultSet.getInt("stu_age"));
-                    student.setStuClass(resultSet.getInt("stu_class"));
-                    student.setStuDesc(resultSet.getString("stu_desc"));
-                }
-                return student;
-            }, sid);
+            student = queryRunner.query(sql, new BeanHandler<>(Student.class), sid);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return student1;
+        return student;
     }
 
     public List<Student> queryStudent() {
         DataSource dataSource = DruidUtils.getDataSource();
         QueryRunner queryRunner = new QueryRunner(dataSource);
         List<Student> students = new ArrayList<>();
-        String sql = "select * from students";
+        String sql = "select sid, stu_num stuNum, stu_name stuName, stu_gender stuGender, stu_age stuAge, stu_class stuClass, stu_desc stuDesc from students";
         try {
             students = queryRunner.query(sql, new BeanListHandler<>(Student.class));
         } catch (SQLException e) {

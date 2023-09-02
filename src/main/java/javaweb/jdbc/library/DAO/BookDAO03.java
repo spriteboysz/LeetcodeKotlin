@@ -3,6 +3,8 @@ package javaweb.jdbc.library.DAO;
 import javaweb.jdbc.library.DTO.Book;
 import javaweb.jdbc.library.Utils.DruidUtils;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -61,22 +63,9 @@ public class BookDAO03 {
         DataSource dataSource = DruidUtils.getDataSource();
         QueryRunner queryRunner = new QueryRunner(dataSource);
         Book book = null;
-        String sql = "select * from books where bid = ?";
+        String sql = "select bid, book_num bookNum, book_name bookName, book_author bookAuthor, book_price bookPrice, book_desc bookDesc, book_stock bookStock from books where bid = ?";
         try {
-            // book = queryRunner.query(sql, new BeanHandler<>(Book.class), bid);
-            book = queryRunner.query(sql, resultSet -> {
-                Book book1 = new Book();
-                while (resultSet.next()) {
-                    book1.setBid(bid);
-                    book1.setBookNum(resultSet.getString("book_num"));
-                    book1.setBookName(resultSet.getString("book_name"));
-                    book1.setBookAuthor(resultSet.getString("book_author"));
-                    book1.setBookPrice(resultSet.getFloat("book_price"));
-                    book1.setBookDesc(resultSet.getString("book_desc"));
-                    book1.setBookStock(resultSet.getInt("book_stock"));
-                }
-                return book1;
-            }, 1);
+            book = queryRunner.query(sql, new BeanHandler<>(Book.class), bid);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,27 +75,13 @@ public class BookDAO03 {
     public List<Book> queryBook() {
         DataSource dataSource = DruidUtils.getDataSource();
         QueryRunner queryRunner = new QueryRunner(dataSource);
-        List<Book> books2 = new ArrayList<>();
-        String sql = "select * from books";
+        List<Book> books = new ArrayList<>();
+        String sql = "select bid, book_num bookNum, book_name bookName, book_author bookAuthor, book_price bookPrice, book_desc bookDesc, book_stock bookStock from books";
         try {
-            books2 = queryRunner.query(sql, resultSet -> {
-                List<Book> books = new ArrayList<>();
-                while (resultSet.next()) {
-                    Book book = new Book();
-                    book.setBid(resultSet.getInt("bid"));
-                    book.setBookNum(resultSet.getString("book_num"));
-                    book.setBookName(resultSet.getString("book_name"));
-                    book.setBookAuthor(resultSet.getString("book_author"));
-                    book.setBookPrice(resultSet.getFloat("book_price"));
-                    book.setBookDesc(resultSet.getString("book_desc"));
-                    book.setBookStock(resultSet.getInt("book_stock"));
-                    books.add(book);
-                }
-                return books;
-            });
+            books = queryRunner.query(sql, new BeanListHandler<>(Book.class));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return books2;
+        return books;
     }
 }
