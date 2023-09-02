@@ -89,4 +89,8 @@ public class Student {
     public void setStuDesc(String stuDesc) {
         this.stuDesc = stuDesc;
     }
+
+    public static void main(String[] args) {
+        System.out.println(new Student());
+    }
 }
