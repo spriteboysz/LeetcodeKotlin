@@ -5,6 +5,12 @@ import javaweb.jdbc.library.DAO.RecordDAO03;
 import javaweb.jdbc.library.DTO.Book;
 import javaweb.jdbc.library.DTO.Record;
 import javaweb.jdbc.library.DTO.Student;
+import javaweb.jdbc.library.Utils.DruidUtils;
+import org.apache.commons.dbutils.DbUtils;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Author: Deean
@@ -21,6 +27,29 @@ public class BorrowBook03 {
         RecordDAO03 recordDAO = new RecordDAO03();
         Record record = new Record(0, student.getStuNum(), book.getBookNum(), num, "2023-9-2");
         boolean flag2 = recordDAO.insertRecord(record);
+        return flag1 && flag2;
+    }
+
+    public boolean borrowBook02(Student student, Book book, int num) {
+        boolean flag1, flag2;
+        DataSource dataSource = DruidUtils.getDataSource();
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            BookDAO03 bookDAO = new BookDAO03();
+            flag1 = bookDAO.updateBook(book.getBid(), num);
+            // int error = 10 / 0;
+            RecordDAO03 recordDAO = new RecordDAO03();
+            Record record = new Record(0, student.getStuNum(), book.getBookNum(), num, "2023-9-2");
+            flag2 = recordDAO.insertRecord(record);
+            if (flag1 && flag2) {
+                DbUtils.commitAndCloseQuietly(connection);
+            }
+        } catch (SQLException e) {
+            DbUtils.rollbackAndCloseQuietly(connection);
+            throw new RuntimeException(e);
+        }
         return flag1 && flag2;
     }
 }

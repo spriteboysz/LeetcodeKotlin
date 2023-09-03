@@ -20,4 +20,14 @@ class BorrowBook03Test {
         boolean flag = borrowBook.borrowBook01(student, book, 2);
         assertTrue(flag);
     }
+
+    @Test
+    void borrowBook02() {
+        StudentDAO03 studentDAO = new StudentDAO03();
+        Student student = studentDAO.queryStudent(2);
+        BookDAO03 bookDAO = new BookDAO03();
+        Book book = bookDAO.queryBook(1);
+        boolean flag = borrowBook.borrowBook02(student, book, 2);
+        assertTrue(flag);
+    }
 }
