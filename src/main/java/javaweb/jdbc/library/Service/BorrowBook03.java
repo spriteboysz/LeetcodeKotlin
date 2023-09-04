@@ -31,7 +31,7 @@ public class BorrowBook03 {
     }
 
     public boolean borrowBook02(Student student, Book book, int num) {
-        boolean flag1, flag2;
+        boolean flag1 = false, flag2 = false;
         DataSource dataSource = DruidUtils.getDataSource();
         Connection connection = null;
         try {
@@ -48,7 +48,7 @@ public class BorrowBook03 {
             }
         } catch (SQLException e) {
             DbUtils.rollbackAndCloseQuietly(connection);
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return flag1 && flag2;
     }
